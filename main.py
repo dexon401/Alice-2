@@ -128,7 +128,7 @@ def play_game(res, req):
             {"title": "Нет", "hide": True},
         ]
     else:
-        if attempt == 2:
+        if attempt == 3:
             res["response"]["text"] = f"Вы пытались. Это {city.title()}. Сыграем ещё?"
             sessionStorage[user_id]["guessed_cities"].append(city)
             sessionStorage[user_id]["game_started"] = False
