@@ -1,8 +1,8 @@
 import logging
-import random
-import waitress
 import os
+import random
 
+import waitress
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
@@ -57,11 +57,16 @@ def handle_dialog(res, req):
             )
             res["response"]["buttons"] = [
                 {"title": city.title(), "hide": True} for city in cities
-            ]
+            ] + [{"title": "Помощь", "hide": False}]
 
     else:
+        if req["request"]["original_utterance"].lower() == "помощь":
+            res["response"]["text"] = (
+                "Справка: Это бот, угадывающий город и показывающий его фото"
+            )
+            return
         city = get_city(req)
-        
+
         if city in cities:
             res["response"]["card"] = {}
             res["response"]["card"]["type"] = "BigImage"
