@@ -1,8 +1,8 @@
 import logging
-import random
 import os
-import waitress
+import random
 
+import waitress
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
@@ -29,7 +29,7 @@ def main():
     response = {
         "session": request.json["session"],
         "version": request.json["version"],
-        "response": {"end_session": False},
+        "response": {"end_session": False, "buttons": []},
     }
     handle_dialog(response, request.json)
     logging.info("Response: %r", response)
@@ -38,6 +38,10 @@ def main():
 
 def handle_dialog(res, req):
     user_id = req["session"]["user_id"]
+
+    if "помощь" in req["request"]["nlu"]["tokens"]:
+        res["response"]["text"] = "Справка: это навык, где ты можешь отгадывать города!"
+        return
 
     if req["session"]["new"]:
         res["response"]["text"] = "Привет! Назови своё имя!"
@@ -87,6 +91,9 @@ def handle_dialog(res, req):
             ]
     else:
         play_game(res, req)
+
+    if not any(btn.get("title") == "Помощь" for btn in res["response"]["buttons"]):
+        res["response"]["buttons"].append({"title": "Помощь", "hide": False})
 
 
 def play_game(res, req):
