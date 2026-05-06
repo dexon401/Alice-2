@@ -133,6 +133,7 @@ def play_game(res, req):
         res["response"]["buttons"] = [
             {"title": "Да", "hide": True},
             {"title": "Нет", "hide": True},
+            {"title": "Покажи город на карте", "url": f"https://yandex.ru/maps/?mode=search&text={city}", "hide": True}
         ]
     else:
         if attempt == 3:
